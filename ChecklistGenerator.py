@@ -1,45 +1,68 @@
+﻿
 
-import re
+class Item:
+    def __init__(self, title, parameter = None, itemType = None):
+        self.branches = []
+        self.title = title
+        self.itemType = None
+        self.parameter = parameter
 
-import enclosureOptions as options
+    def print(self, depth = 0):
+        print("  "*depth, "»", self.title, sep = "")
+        for branch in self.branches:
+            branch.print(depth + 1);
 
-def removeWhiteSpace(string):
-    pieces = string.split('\"')
-    for i, item in enumerate(pieces):
-        if not i % 2:
-            pieces[i] = re.sub("\s+", "", item)
-    return '\"'.join(pieces)
+    def push(self, item):
+        self.branches.append(item)
+        return item
 
-def parseConfig(string):
-    bags = {}
-    
-    string = removeWhiteSpace(string)
+class Checklist:
+    def __init__(self):
+        self.tree = Item("root")
 
-    bagsRaw = string.split('}')
-    for bag in bagsRaw:
-        bagRaw = bag.split('{')
-        if (len(bag) > 0):
-            bagName = bagRaw[0].replace("\"", "")
-            bags[bagName] = []
-            bagItems = bagRaw[1].split(',')
-            for item in bagItems:
-                bags[bagName].append(item.replace("\"", ""))
-
-    for bagName in bags:
-        print(bagName)
-        for item in bags[bagName]:
-            print("\t"+item)
+    def loadOptions(self, enclosureType, options):
+        with open("config/"+enclosureType+"/convert.txt") as f:
+            convert2 = f.read().split('\n')
+            convert = []
+            for conversion in convert2:
+                convert.append(conversion.split('='))
             
+        with open("config/"+enclosureType+"/interpret.txt") as f:
+            interpret = f.read().replace("\n\n", '\n').split('\n')
+        
+        for conversion in convert:
+            options = options.replace(conversion[0], conversion[1])
+        
+        
 
+        options = options.split('\n')
 
+        for option in options:
+            print(option)
+        print()
 
-def readConfiguration(type):
-    f = open("config/"+type+"/items.txt")
-    parseConfig(f.read())
-    f.close()
+        for i, line in sorted(enumerate(options), reverse=True):
+            containsAnOption = False
+            for otherLine in interpret:
+                if line.find(otherLine) != -1:
+                    containsAnOption = True
+            if not containsAnOption:
+                options.pop(i)
 
-#readConfiguration("xTool D1")
+        for option in options:
+            print(option)
+        return options
+
+    def printItems(self):
+        self.tree.print();
+
 
 options1 = "xTool D1 Laser Enclosure Fume Hood Kit - Default Title #MWS Options 4247556978\nSKU:\nHide Description\n_mws_required:\n_mws_qty:1\n_mws_cart:1223086\nEstimated between:Apr 28, 2022 - May 5, 2022\nPanel Thickness:Commercial Grade 1/4\" Panels (Strongly Recommended)\nPanel Type: Full Laser Filtering\nPrinted Bracket Kit: Please Include Brackets and Parts\nUSB Exhaust Fan:No USB Exhaust Fan - Includes 4\" Mounting Bracket\nUSB Lighting Kit:No thank you.\nDoor Pulls (2 pieces):Plastic\nFitted MDF Spoil Board:No Thank you\nExtended height lift kit:Yes Please Include the lift kit\nHardware Grade:Nickel Plated Steel\n"
 
-options.loadOptions("xTool D1", options1)
+#options.loadOptions("xTool D1", options1)
+
+xToolList = Checklist()
+
+xToolList.loadOptions("xTool D1", options1)
+
+xToolList.printItems()

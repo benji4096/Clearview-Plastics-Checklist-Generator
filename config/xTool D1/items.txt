@@ -1,0 +1,19 @@
+
+"Bag 1"
+{
+	"magnetic brackets",
+	"corner brackets"
+}
+
+"Bag 2"
+{
+	"rubber grommet",
+	"hardware"
+}
+
+"Bag 3"
+{
+	"corner hinges" [count=3],
+	"flat hinges" [count=2],
+	"PSU port"
+}

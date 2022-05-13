@@ -17,7 +17,7 @@ def main(enclosureType, options):
 
     panelThickness = options["Panel Thickness"]
 
-    rtn.push(Item("Panels" + " " + panelThickness + " " + options["Panel Type"]))
+    rtn.push(Item("Panels" + " " + panelThickness + " " + options["Panel Type"], ItemType.CHECK_BOX))
 
     
     

@@ -21,10 +21,38 @@ class Item:
         for branch in self.branches:
             branch.print(depth + 1)
 
-    def getHtmlChecklistString(self, depth = 0):
-        htmlString = f"<input type=\"checkbox\" id=\"{self.text}\"><label for=\"{self.text}\"> {self.text}</label><br>"
+        #    │
+        #    ├
+        #    └
+        #    │
+        #    ├
+        #    ╰
+
+    def getHtmlChecklistString(self, depth = 0, lastAtDepth = False):
+        
+        if self.text != "root":
+            indent = max(depth - 1, 0) * "│ "
+
+            if lastAtDepth:
+                indent += "└ "
+            else:
+                indent += "├ "
+
+            printTextBegin = f"{indent}"
+            printTextEnd = f"{self.text}"
+
+            htmlString = "ERROR: html string not set"
+            if self.itemType == ItemType.BAG:
+                htmlString = f"<span>{printTextBegin+printTextEnd}</span><br>"
+            elif self.itemType == ItemType.CHECK_BOX:
+                htmlString = f"<span>{printTextBegin}</span><input type=\"checkbox\" id=\"{self.text}\"><label for=\"{self.text}\"> {printTextEnd}</label><br>"
+            elif self.itemType is None:
+                htmlString = f"<span>{printTextBegin+printTextEnd}</span><br>"
+        else:
+            htmlString = ""
+
         for branch in self.branches:
-            htmlString += branch.getHtmlChecklistString(depth + 1)
+            htmlString += branch.getHtmlChecklistString(depth + 1, True if branch is self.branches[-1] else False)
         return htmlString
 
     def push(self, item):

@@ -48,9 +48,8 @@ class Checklist:
             with open("templates/print.html", 'r') as f:
                 htmlText = f.read()
 
-
-        htmlText = htmlText.replace("<!-->{checkboxes}<!-->", self.tree.getHtmlChecklistString())
+        htmlText = htmlText.replace("${checkboxes}", self.tree.getHtmlChecklistString())
         
-        with open("print.html", 'w') as f:
+        with open("out/print.html", 'w', encoding="utf-8") as f:
             f.write(htmlText)
 

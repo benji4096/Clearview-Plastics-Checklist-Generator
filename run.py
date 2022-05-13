@@ -8,3 +8,5 @@ checklist = ch.Checklist()
 checklist.loadOptions("xTool D1", options1)
 
 checklist.printItems()
+
+checklist.saveFile()

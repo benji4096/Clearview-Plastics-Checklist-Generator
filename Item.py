@@ -21,6 +21,12 @@ class Item:
         for branch in self.branches:
             branch.print(depth + 1)
 
+    def getHtmlChecklistString(self, depth = 0):
+        htmlString = f"<input type=\"checkbox\" id=\"{self.text}\"><label for=\"{self.text}\"> {self.text}</label><br>"
+        for branch in self.branches:
+            htmlString += branch.getHtmlChecklistString(depth + 1)
+        return htmlString
+
     def push(self, item):
         self.branches.append(item)
         return item

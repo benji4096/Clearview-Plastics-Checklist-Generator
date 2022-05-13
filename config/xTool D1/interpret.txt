@@ -1,8 +1,8 @@
 Panel Thickness
-PanelType
-Brackets
+Panel Type
+Printed Parts
 Fan
-LightingKit
+Lighting Kit
 Door Pulls
 Spoil Board
 Lift Kit

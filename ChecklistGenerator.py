@@ -2,6 +2,7 @@
 import sys
 import importlib
 import json
+import os
 
 from Item import *
 
@@ -49,6 +50,10 @@ class Checklist:
                 htmlText = f.read()
 
         htmlText = htmlText.replace("${checkboxes}", self.tree.getHtmlChecklistString())
+        
+        outPath = os.path.join(os.getcwd(), "out")
+        if not os.path.exists(outPath):
+            os.mkdir(outPath)
         
         with open("out/print.html", 'w', encoding="utf-8") as f:
             f.write(htmlText)
